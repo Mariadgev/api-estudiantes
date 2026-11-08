@@ -1,23 +1,36 @@
 const express = require('express');
 const app = express();
-const puerto = 3000;
+const PORT = 3000;
 
-// Una lista de ejemplo de estudiantes actualizada
-const estudiantes = [
-    { id: 1, nombre: "María", carrera: "Ingeniería de Sistemas" },
-    { id: 2, nombre: "Jhonatan", carrera: "Ingeniería de Sistemas" },
-    { id: 3, nombre: "Emilio", carrera: "Ingeniería de Software" }
-];
+// Middleware para procesar cuerpos JSON
+app.use(express.json());
 
-// Ruta principal de bienvenida con un saludo más lindo
+// Ruta raíz de bienvenida
 app.get('/', (req, res) => {
-    res.send('<h1>¡Bienvenida a la API de Estudiantes! 🚀</h1><p>El servidor se encuentra funcionando correctamente.</p>');
+  res.send('Bienvenida a la API de estudiantes - Computación en la Nube');
 });
 
-// NUEVA RUTA: Para ver la lista de estudiantes
+// Ruta GET /estudiantes: Retorna listado de estudiantes
 app.get('/estudiantes', (req, res) => {
-    res.json(estudiantes);
+  res.json([
+    { id: 1, nombre: 'María', programa: 'Ingeniería de Sistemas' },
+    { id: 2, nombre: 'Jhonatan', programa: 'Ingeniería de Sistemas' },
+    { id: 3, nombre: 'Emilio', programa: 'Ingeniería de Software' }
+  ]);
 });
 
-app.listen(puerto, () => {
-    console.log(`Servidor corriendo en http://localhost:${puerto}`);});
+// Ruta POST /estudiantes: Crea un nuevo registro
+app.post('/estudiantes', (req, res) => {
+  const nuevo = req.body;
+  res.status(201).json({ mensaje: 'Estudiante creado', data: nuevo });
+});
+
+// Nuevo endpoint agregado en la rama secundaria
+app.get('/saludo', (req, res) => {
+  res.json({ mensaje: 'Hola desde la rama feature/nuevo-endpoint!' });
+});
+
+// Servidor escuchando en el puerto 3000
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo exitosamente en puerto ${PORT}`);
+});
